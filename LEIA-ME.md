@@ -47,7 +47,7 @@ Projeto é a chave para acrescentar os dados do cadastro. Status da programaçã
 
 ### Publicação / execução
 
-O conteúdo de `dist/` é um site estático, sem compilação e sem chave de API. Abra `index.html` após extrair todos os arquivos, ou sirva a pasta por HTTP/HTTPS. Mantenha as pastas vendor e originais. O mapa de fundo e os links de rota precisam de internet. A posição do próprio usuário depende de HTTPS e da permissão do navegador e não é armazenada.
+O conteúdo de `dist/` é um site estático, sem chave de API. O `index.html` incorpora o mapa, os estilos, as funções e as bases; a visualização não depende de pastas de scripts. Abra esse arquivo ou publique-o por HTTP/HTTPS. A pasta originais permite baixar as duas planilhas de origem e licencas preserva as licenças. O código-fonte fica em src/; após editar, execute python build-standalone.py antes de publicar dist/. O mapa de fundo e os links de rota precisam de internet. A posição do próprio usuário depende de HTTPS e da permissão do navegador e não é armazenada.
 
 O ZIP de distribuição tem os arquivos de `dist/` na raiz. Para GitHub Pages, envie todo o conteúdo extraído para a raiz da branch escolhida, incluindo `.nojekyll`, e configure Pages para essa branch e pasta raiz. A publicação fornecida nesta tarefa tem acesso privado ao proprietário.
 
@@ -58,3 +58,7 @@ Leaflet 1.9.4 e SheetJS CE 0.20.3 incluídos localmente, com suas respectivas li
 ## Links de localização
 
 As colunas Google Maps e Waze ficam ao lado do projeto na Visão consolidada. Quando houver vários equipamentos, são exibidos links numerados na mesma ordem das coordenadas. A aba Localizações e rotas mostra cada equipamento separadamente. As exportações de seleção e da base completa incluem a aba Localizacoes, com hyperlinks individuais no Excel. Exportar a tabela consolidada também inclui essa aba para o recorte da busca. Sem coordenadas comprovadas, não é gerado link. As coordenadas são usadas diretamente, sem estimativa por endereço.
+
+## Correção para a visão territorial no GitHub Pages
+
+O index.html autônomo incorpora Leaflet, estilos e dados. Não há solicitação a vendor/leaflet.js ou dependência de pastas que possam ser omitidas ao publicar. A pasta ZIP tem index.html diretamente na raiz, junto de .nojekyll. Extraia a pasta e envie o conteúdo, sem enviar apenas o ZIP. No GitHub, configure Settings → Pages → Deploy from a branch → branch main (ou a utilizada) → / (root). Publique na pasta correspondente à configuração de Pages, sem criar uma pasta adicional em torno do index. Depois de concluído o processamento, atualize a página com Ctrl+F5. O mapa de fundo usa OpenStreetMap pela internet; os pontos são calculados da base incorporada. Não é necessário importar os arquivos para a primeira visualização.
