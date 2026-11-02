@@ -6,56 +6,57 @@
 <title>Localização de Equipes · SIGEO</title>
 <meta name="description" content="Mapa de localização de equipes e programações de projetos – Enel Distribuição São Paulo">
 <link rel="stylesheet" href="libs/leaflet/leaflet.css">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=20261102">
 </head>
 <body>
 
+<a class="pular" href="#conteudo">Ir para o conteúdo</a>
 <header class="topo">
   <div class="topo-id">
-    <div class="marca" aria-hidden="true">S</div>
-    <div>
-      <h1>SIGEO · Localização de Equipes</h1>
-      <p class="sub">Enel Distribuição São Paulo · horário de Brasília · <span id="relogio"></span></p>
+    <img class="logo-enel" src="assets/enel-brasil.svg" alt="Enel Brasil" width="110" height="62">
+    <div class="titulo-site">
+      <h1>SIGEO · Localização de Equipes 2026</h1>
+      <p class="sub">Enel Distribuição São Paulo · Programações e serviços de campo</p>
     </div>
   </div>
-  <div class="topo-acoes">
-    <button class="btn" id="btnImportar" type="button">Importar Excel / CSV</button>
-    <button class="btn" id="btnExportar" type="button">Exportar seleção</button>
-    <button class="btn btn-prim" id="btnBase" type="button">Consultar base de dados</button>
-    <input type="file" id="arquivoImportar" accept=".xlsx,.xls,.csv" hidden>
+  <div class="relogio-painel" aria-label="Data e hora de Brasília">
+    <time id="relogio" class="relogio-hora"></time>
+    <div><div id="relogioData" class="relogio-data"></div><span class="relogio-zona"><i aria-hidden="true"></i> Brasília (BRT, UTC−3)</span></div>
   </div>
 </header>
-
-<main>
-  <p class="fonte-resumo" id="fonteResumo"></p>
-
-  <section class="filtros" aria-labelledby="tFiltros">
-    <h2 id="tFiltros">Refine sua análise</h2>
-    <div class="filtros-grid">
-      <label class="campo campo-lg">Busca geral
-        <input type="search" id="fBusca" placeholder="Projeto, equipamento, PowerOn, contratada…">
-      </label>
-      <label class="campo">De
-        <input type="text" id="fDe" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" autocomplete="off">
-      </label>
-      <label class="campo">Até
-        <input type="text" id="fAte" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" autocomplete="off">
-      </label>
-      <div class="atalhos">
-        <button class="btn btn-sm" id="btnHoje" type="button">Hoje</button>
-        <button class="btn btn-sm" id="btn7" type="button">Próximos 7 dias</button>
-        <button class="btn btn-sm btn-link" id="btnLimpar" type="button">Limpar filtros</button>
-      </div>
-      <label class="campo">Regional <select id="fRegional"></select></label>
-      <label class="campo">Contratada <select id="fContratada"></select></label>
-      <label class="campo">Status da programação <select id="fStatus"></select></label>
-      <label class="campo">Tipo de intervenção <select id="fTipo"></select></label>
-      <label class="campo campo-lg">Descrição do projeto <select id="fDescricao"></select></label>
-      <label class="campo">Geolocalização <select id="fGeo"></select></label>
-      <label class="campo">Circuito <select id="fCircuito"></select></label>
+<nav class="barra-acoes" aria-label="Navegação e arquivos">
+  <div class="atalhos-pagina"><a href="#cartaoMapa">Mapa e agenda</a><a href="#tGraficos">Gráficos</a><a href="#secDados">Base de dados</a></div>
+  <div class="topo-acoes">
+    <button class="btn btn-sm" id="btnImportar" type="button">Importar Excel / CSV</button>
+    <button class="btn btn-sm" id="btnExportar" type="button">Exportar seleção</button>
+    <button class="btn btn-sm btn-prim" id="btnBase" type="button">Consultar base de dados</button>
+    <input type="file" id="arquivoImportar" accept=".xlsx,.xls,.csv" hidden>
+  </div>
+</nav>
+<div class="painel-layout">
+  <aside class="filtros" aria-labelledby="tFiltros">
+    <div class="filtros-cab"><h2 id="tFiltros">Filtros de pesquisa</h2><button class="btn btn-sm btn-link" id="btnLimpar" type="button">Limpar tudo</button></div>
+    <button class="btn filtros-toggle" id="btnFiltros" type="button" aria-expanded="false" aria-controls="painelFiltros">Mostrar filtros</button>
+    <div id="painelFiltros" class="filtros-corpo">
+      <p class="grupo-titulo">GERAL</p>
+      <label class="campo">Pesquisar<input type="search" id="fBusca" placeholder="Projeto, equipamento, PowerON…"></label>
+      <div class="filtro-campo"><span id="rotRegional">Região</span><select id="fRegional" aria-labelledby="rotRegional"></select><div class="filtro-opcoes filtro-pills" data-filter="fRegional" role="group" aria-labelledby="rotRegional"></div></div>
+      <div class="filtro-campo"><span id="rotDescricao">Descrição do projeto</span><select id="fDescricao" aria-labelledby="rotDescricao"></select><div class="filtro-opcoes" data-filter="fDescricao" role="group" aria-labelledby="rotDescricao"></div></div>
+      <div class="filtro-campo"><span id="rotContratada">Contratada</span><select id="fContratada" aria-labelledby="rotContratada"></select><div class="filtro-opcoes" data-filter="fContratada" role="group" aria-labelledby="rotContratada"></div></div>
+      <div class="filtro-campo"><span id="rotStatus">Status da programação</span><select id="fStatus" aria-labelledby="rotStatus"></select><div class="filtro-opcoes" data-filter="fStatus" role="group" aria-labelledby="rotStatus"></div></div>
+      <div class="filtro-campo"><span id="rotTipo">Tipo de intervenção</span><select id="fTipo" aria-labelledby="rotTipo"></select><div class="filtro-opcoes filtro-pills" data-filter="fTipo" role="group" aria-labelledby="rotTipo"></div></div>
+      <p class="grupo-titulo">PERÍODO DA PROGRAMAÇÃO</p>
+      <div class="datas-filtro"><label class="campo">De<input type="text" id="fDe" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" autocomplete="off"></label><label class="campo">Até<input type="text" id="fAte" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" autocomplete="off"></label></div>
+      <div class="atalhos"><button class="btn btn-sm" id="btnHoje" type="button">Hoje</button><button class="btn btn-sm" id="btn7" type="button">Próximos 7 dias</button></div>
+      <p class="grupo-titulo">LOCALIZAÇÃO</p>
+      <label class="campo">Geolocalização<select id="fGeo"></select></label>
+      <div class="filtro-campo"><span id="rotCircuito">Circuito</span><select id="fCircuito" aria-labelledby="rotCircuito"></select><div class="filtro-opcoes" data-filter="fCircuito" role="group" aria-labelledby="rotCircuito"></div></div>
+      <p class="filtro-ajuda">Selecione uma ou mais opções. As quantidades ao lado de cada opção indicam o total na base.</p>
+      <p class="filtros-ativos" id="filtrosAtivos" aria-live="polite"></p>
     </div>
-    <p class="filtros-ativos" id="filtrosAtivos" aria-live="polite"></p>
-  </section>
+  </aside>
+  <main id="conteudo">
+  <p class="fonte-resumo" id="fonteResumo"></p>
 
   <section class="kpis" aria-label="Indicadores" id="kpis"></section>
 
@@ -165,6 +166,7 @@
     <p class="nota"><strong>Precisão da localização.</strong> <em>Exata</em>: o código do equipamento existe na base. <em>Inferida</em>: o código estava escrito em outro formato (por exemplo, <code>ET-004443</code>) e só um equipamento da base combina com ele. <em>Circuito (aprox.)</em>: o código é de um disjuntor de alimentador (<code>DJ…</code>) e o ponto mostrado é o centro dos equipamentos do circuito. <em>Sem localização</em>: o código não foi encontrado; o projeto aparece nas pendências.</p>
   </section>
 </main>
+</div>
 
 <footer class="rodape">
   <h2>Fontes e critérios</h2>
@@ -174,6 +176,7 @@
     <li>Datas exibidas no padrão brasileiro (dd/mm/aaaa).</li>
     <li>Importações feitas aqui ficam apenas no seu navegador e não atualizam o site publicado. <button class="btn btn-sm btn-link" id="btnRestaurar" type="button">Restaurar base original</button></li>
   </ul>
+  <p class="autoria">Criado por <strong>Gilmar Campos</strong></p>
 </footer>
 
 <div class="modal" id="modalImp" hidden>
@@ -196,6 +199,6 @@
 <script src="libs/chart.umd.js"></script>
 <script src="libs/xlsx.full.min.js"></script>
 <script src="data/programacao.js"></script>
-<script src="js/app.js"></script>
+<script src="js/app.js?v=20261102"></script>
 </body>
 </html>

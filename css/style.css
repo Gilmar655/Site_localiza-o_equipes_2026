@@ -6,16 +6,6 @@
   --ok:#0f7a3d; --alerta:#b26a00; --erro:#b3261e;
   --grade:#e6e5e0;
 }
-@media (prefers-color-scheme: dark){
-  :root{
-    color-scheme: dark;
-    --bg:#121211; --surface:#1a1a19; --surface-2:#242422; --borda:#34332f; --borda-forte:#4a4944;
-    --txt:#f0efec; --txt-2:#c3c2b7; --txt-3:#98978f;
-    --serie:#3987e5; --serie-fraca:#4a4944; --destaque:#d95926;
-    --ok:#4cc37d; --alerta:#e0a030; --erro:#ff8a80;
-    --grade:#2c2b28;
-  }
-}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
@@ -124,3 +114,28 @@ dialog form{text-align:right;margin-top:12px}
 .lk:hover{background:var(--serie);color:#fff}
 .leaflet-popup-content{font-size:.85rem;margin:10px 12px}
 .legenda-mapa{background:var(--surface);padding:6px 10px;border-radius:8px;border:1px solid var(--borda);font-size:.76rem;color:var(--txt)}
+
+/* Layout Enel Brasil · filtros laterais · 02/11/2026 */
+:root{color-scheme:light;--bg:#f3f6fb;--surface:#fff;--surface-2:#f5f8fd;--borda:#e0e8f4;--borda-forte:#cdd9ec;--txt:#14213d;--txt-2:#526489;--txt-3:#7586a6;--serie:#287ddb;--serie-fraca:#c9def8;--destaque:#003781;--grade:#e5edf7;--altura-topo:86px}
+body{font-size:14px}h1,h2,h3{color:#003478}h1{font-size:1.2rem}h2{font-size:.98rem}h3{font-size:.9rem}
+.topo{padding:12px 26px;gap:20px;border:0;background:#fff;box-shadow:0 1px 6px #16376708}
+.topo:after{content:"";height:3px;position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to right,#00b451 0 34%,#ffd21c 34% 67%,#003478 67%)}
+.topo-id{gap:20px;min-width:0}.logo-enel{width:110px;height:62px;object-fit:contain;flex:none}.titulo-site{border-left:1px solid var(--borda);padding-left:18px}.sub{margin-top:5px;font-size:.76rem}
+.relogio-painel{display:flex;align-items:center;gap:15px;padding:10px 16px;border:1px solid var(--borda);border-radius:13px;background:#f7f9fd;color:#003478}
+.relogio-hora{font-size:1.6rem;font-weight:750;font-variant-numeric:tabular-nums;white-space:nowrap}.relogio-data{font-size:.7rem;font-weight:600}.relogio-zona{font-size:.68rem;color:var(--txt-2);display:flex;align-items:center;gap:6px;margin-top:4px}.relogio-zona i{width:7px;height:7px;background:#00ac41;border-radius:50%;box-shadow:0 0 0 3px #e0f5e9}
+.barra-acoes{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 26px;background:#fff;border-bottom:1px solid var(--borda);flex-wrap:wrap}.atalhos-pagina{display:flex;gap:22px;flex-wrap:wrap}.atalhos-pagina a{font-size:.82rem;text-decoration:none;color:#003478;padding:6px 0}.atalhos-pagina a:hover{text-decoration:underline}
+.painel-layout{display:grid;grid-template-columns:290px minmax(0,1fr);gap:20px;max-width:1920px;margin:0 auto;padding:20px 24px;align-items:start}
+main{min-width:0;width:100%;max-width:none;padding:0;margin:0}.fonte-resumo{font-size:.74rem;margin:0 0 12px}.cartao,.kpi,.filtros{box-shadow:0 3px 12px #213d6810}.cartao{padding:18px;border-radius:15px}
+.filtros{position:sticky;top:calc(var(--altura-topo) + 16px);max-height:calc(100dvh - var(--altura-topo) - 32px);overflow:auto;margin:0;padding:0;border-radius:13px;scrollbar-width:thin;scrollbar-color:#b9c6d9 transparent}
+.filtros-cab{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 15px;border-bottom:1px solid var(--borda);position:sticky;top:0;background:#fff;z-index:2}.filtros-cab h2{font-size:.84rem}.filtros-cab .btn{font-size:.73rem;padding:3px 0;text-decoration:none}
+.filtros-corpo{padding:0 15px 16px}.grupo-titulo{font-size:.68rem;letter-spacing:.07em;color:var(--txt-2);margin:16px 0 14px;font-weight:700}.filtros .campo,.filtro-campo{font-size:.75rem;color:var(--txt-2);font-weight:400;margin:14px 0}.filtros input,.filtros select{font-size:.76rem}.filtro-campo>span{display:block;margin-bottom:5px}.filtro-campo>select[hidden]{display:none}
+.filtro-opcoes{border:1px solid var(--borda);border-radius:9px;overflow:hidden}.lista-busca{width:100%;border:0;border-bottom:1px solid var(--borda);font:inherit;padding:9px 10px;color:var(--txt);background:#fff}.lista-opcoes{max-height:174px;overflow:auto;scrollbar-width:thin;scrollbar-color:#bcc9dd transparent}.opcao-filtro{display:flex;align-items:center;gap:8px;padding:7px 9px;color:var(--txt);font-size:.73rem;cursor:pointer;min-height:33px}.opcao-filtro:hover{background:#f0f6ff}.opcao-filtro:has(input:checked){background:#eef5ff;color:#003478}.opcao-filtro[hidden]{display:none}.opcao-filtro input{margin:0;width:14px;height:14px;flex:none;accent-color:#1674d5}.opcao-filtro span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.opcao-filtro small{font-size:.68rem;color:var(--txt-3)}.lista-vazia{font-size:.72rem;padding:5px 10px}
+.filtro-pills{border:0;border-radius:0}.filtro-pills .lista-opcoes{display:flex;flex-wrap:wrap;gap:6px;max-height:none;overflow:visible}.filtro-pills .opcao-filtro{border:1px solid var(--borda);border-radius:18px;padding:5px 10px;min-height:30px}.filtro-pills .opcao-filtro input{position:absolute;opacity:0;width:1px;height:1px}.filtro-pills .opcao-filtro:has(input:checked){border-color:#287ddb;background:#eaf3ff}.filtro-pills .opcao-filtro:has(input:focus-visible){outline:2px solid #287ddb;outline-offset:2px}
+.datas-filtro{display:grid;grid-template-columns:1fr 1fr;gap:8px}.datas-filtro .campo{margin-top:0}.filtro-ajuda{font-size:.67rem;color:var(--txt-3);line-height:1.5}.filtros-ativos{font-size:.7rem;border-top:1px solid var(--borda);padding-top:12px}.tag{font-size:.68rem;border-radius:6px;white-space:normal;overflow-wrap:anywhere}.filtros-toggle{display:none}
+.kpis{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.kpi{position:relative;overflow:hidden;padding:16px;border-radius:15px}.kpi:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:#003478}.kpi:nth-child(2):before{background:#287ddb}.kpi:nth-child(3):before{background:#00ac41}.kpi:nth-child(4):before{background:#ffbf00}.kpi .rot{text-transform:uppercase;font-size:.66rem;font-weight:700}.kpi .val{font-size:1.85rem;margin:5px 0}.kpi .det{font-size:.7rem;line-height:1.5}
+.duas-col{grid-template-columns:minmax(0,1.55fr) minmax(280px,1fr)}#mapa{height:470px}.agenda{max-height:510px}.agenda-item .l1{flex-wrap:wrap}.agenda-item .l2{display:block;margin-top:3px}.graficos-grid{gap:16px}.graficos{margin-top:22px}.rodape{max-width:1920px;padding:8px 24px 20px}.rodape h2{font-size:.88rem}.rodape ul{font-size:.75rem}.autoria{text-align:center;border-top:1px solid var(--borda);padding-top:18px;margin-top:20px;font-size:.78rem;color:var(--txt-2)}.autoria strong{font-weight:600;color:#003478}
+[id]{scroll-margin-top:calc(var(--altura-topo) + 20px)}.pular{position:fixed;top:-60px;left:12px;background:#fff;padding:12px;z-index:4000}.pular:focus{top:10px}button,a,input,select{touch-action:manipulation}
+@media(max-width:1250px){.duas-col{grid-template-columns:1fr}.topo{gap:12px}.relogio-painel{padding:8px 12px}.relogio-hora{font-size:1.35rem}.painel-layout{grid-template-columns:270px minmax(0,1fr);gap:16px;padding:16px}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.topo-id{gap:12px}.titulo-site{padding-left:12px}}
+@media(max-width:1000px){.topo{position:relative;flex-wrap:wrap;padding:12px 16px}.relogio-painel{margin-left:auto}.painel-layout{grid-template-columns:250px minmax(0,1fr)}.filtros{top:16px;max-height:calc(100dvh - 32px)}[id]{scroll-margin-top:20px}.barra-acoes{padding:10px 16px}.graficos-grid{grid-template-columns:1fr}}
+@media(max-width:760px){.painel-layout{display:block;padding:12px}.filtros{position:static;max-height:none;margin-bottom:16px}.filtros-cab{position:static}.filtros-toggle{display:block;width:calc(100% - 30px);margin:10px 15px}.filtros-corpo{display:none}.filtros.aberto .filtros-corpo{display:block}.topo{gap:12px}.topo-id{width:100%}.logo-enel{width:84px;height:48px}.titulo-site{padding-left:12px}h1{font-size:1rem}.sub{font-size:.66rem}.relogio-painel{width:100%;justify-content:center}.relogio-data{font-size:.66rem}.relogio-hora{font-size:1.4rem}.barra-acoes{gap:10px}.topo-acoes{width:100%;gap:6px}.topo-acoes .btn{flex:1;padding:7px;font-size:.68rem}.atalhos-pagina{gap:18px}.kpis{gap:9px}.kpi{padding:12px}.kpi .val{font-size:1.6rem}.kpi .rot{font-size:.61rem}.cartao{padding:12px}.cartao-cab h2{font-size:.9rem}#mapa{height:380px}.agenda{max-height:350px}.campo-inline{flex-wrap:wrap}.campo-inline input{width:min(260px,100%)}.dados .tab-barra{display:grid;grid-template-columns:1fr}.rodape{padding:8px 16px 20px}.det-grade{grid-template-columns:1fr}.det-grade dd{margin-bottom:8px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}

@@ -56,6 +56,11 @@ let F = Object.assign({}, F0);
 const GEO = [['', 'Todas'], ['com', 'Com localização'], ['exata', 'Localização exata'], ['aprox', 'Aproximada / inferida'], ['sem', 'Sem localização']];
 const SEL = { fRegional: 'regional', fContratada: 'contratada', fStatus: 'status', fTipo: 'tipo', fDescricao: 'descricao', fGeo: 'geo', fCircuito: 'circuito' };
 
+const valores = v => Array.isArray(v) ? v : v ? [v] : [];
+const inclui = (f, v) => valores(f).includes(v);
+const temFiltro = v => valores(v).length > 0;
+function alternarFiltro(k, v) { F[k] = inclui(F[k], v) ? valores(F[k]).filter(x => x !== v) : [...valores(F[k]), v]; }
+
 function contagem(fn) { const m = new Map(); ROWS.forEach(r => { const k = fn(r); if (k) m.set(k, (m.get(k) || 0) + 1); }); return m; }
 function opcoes(sel, mapa, todos, ordem) {
   const el = $('#' + sel); const cur = el.value;
@@ -72,18 +77,19 @@ function montarSelects() {
   opcoes('fCircuito', contagem(r => r.loc && r.loc[2]), 'Todos');
   $('#fGeo').innerHTML = GEO.map(([v, t]) => `<option value="${v}">${t}</option>`).join('');
   const regs = [...contagem(r => r.rg).keys()].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+  montarListas();
   $('#chipsRegiao').innerHTML = ['Todas', ...regs].map(n => `<button type="button" class="chip" data-reg="${n === 'Todas' ? '' : esc(n)}">${esc(n)}</button>`).join('');
 }
 function passa(r) {
   if (F.busca && !r._b.includes(norm(F.busca))) return false;
   if (F.de && r.dt < F.de) return false;
   if (F.ate && r.dt > F.ate) return false;
-  if (F.regional && r.rg !== F.regional) return false;
-  if (F.contratada && r.c !== F.contratada) return false;
-  if (F.status && r.s !== F.status) return false;
-  if (F.tipo && r.t !== F.tipo) return false;
-  if (F.descricao && r.d !== F.descricao) return false;
-  if (F.circuito && (!r.loc || r.loc[2] !== F.circuito)) return false;
+  if (temFiltro(F.regional) && !inclui(F.regional, r.rg)) return false;
+  if (temFiltro(F.contratada) && !inclui(F.contratada, r.c)) return false;
+  if (temFiltro(F.status) && !inclui(F.status, r.s)) return false;
+  if (temFiltro(F.tipo) && !inclui(F.tipo, r.t)) return false;
+  if (temFiltro(F.descricao) && !inclui(F.descricao, r.d)) return false;
+  if (temFiltro(F.circuito) && (!r.loc || !inclui(F.circuito, r.loc[2]))) return false;
   if (F.geo) {
     const p = r.loc ? r.loc[3] : null;
     if (F.geo === 'com' && !p) return false;
@@ -95,16 +101,43 @@ function passa(r) {
 }
 let VIEW = [];
 
+function montarListas() {
+  listasAbort.abort(); listasAbort = new AbortController();
+  $$('.filtro-opcoes').forEach(box => {
+    const id = box.dataset.filter, k = SEL[id];
+    const options = Array.from($('#' + id).options).filter(o => o.value);
+    const pills = box.classList.contains('filtro-pills');
+    const name = $('#' + box.getAttribute('aria-labelledby')).textContent;
+    box.innerHTML = (pills ? '' : `<input class="lista-busca" type="search" placeholder="Buscar…" aria-label="Buscar em ${esc(name)}">`) +
+      `<div class="lista-opcoes">${options.map(o => {
+        const match = / \(([\d.]+)\)$/.exec(o.textContent);
+        return `<label class="opcao-filtro" title="${esc(o.value)}"><input type="checkbox" value="${esc(o.value)}" data-chave="${k}"><span>${esc(o.value)}</span>${match && !pills ? `<small>${match[1]}</small>` : ''}</label>`;
+      }).join('')}</div><p class="lista-vazia" hidden>Nenhuma opção encontrada.</p>`;
+    const search = $('.lista-busca', box);
+    if (search) search.addEventListener('input', () => {
+      let visible = 0;
+      $$('.opcao-filtro', box).forEach(label => { label.hidden = !norm($('input', label).value).includes(norm(search.value)); if (!label.hidden) visible++; });
+      $('.lista-vazia', box).hidden = visible > 0;
+    });
+    box.addEventListener('change', e => {
+      if (!e.target.matches('input[type="checkbox"]')) return;
+      alternarFiltro(k, e.target.value); mudou();
+    }, { signal: listasAbort.signal });
+    $('#' + id).hidden = true;
+  });
+}
+let listasAbort = new AbortController();
 function sincronizarCampos() {
   Object.entries(SEL).forEach(([id, k]) => { $('#' + id).value = F[k]; });
+  $$('.opcao-filtro input').forEach(el => { el.checked = inclui(F[el.dataset.chave], el.value); });
   $('#fBusca').value = F.busca;
   $('#fDe').value = fmtBR(F.de); $('#fAte').value = fmtBR(F.ate);
-  $$('.chip').forEach(c => c.classList.toggle('on', c.dataset.reg === F.regional));
+  $$('.chip').forEach(c => c.classList.toggle('on', c.dataset.reg ? inclui(F.regional, c.dataset.reg) : !temFiltro(F.regional)));
 }
 function rotuloFiltros() {
   const nomes = { busca: 'Busca', de: 'De', ate: 'Até', regional: 'Regional', contratada: 'Contratada', status: 'Status', tipo: 'Tipo de intervenção', descricao: 'Descrição', geo: 'Geolocalização', circuito: 'Circuito' };
-  const tags = Object.keys(F).filter(k => F[k]).map(k => {
-    let v = F[k];
+  const tags = Object.keys(F).filter(k => temFiltro(F[k])).map(k => {
+    let v = Array.isArray(F[k]) ? F[k].join(', ') : F[k];
     if (k === 'de' || k === 'ate') v = fmtBR(v);
     if (k === 'geo') v = GEO.find(g => g[0] === v)[1];
     return `<span class="tag">${nomes[k]}: ${esc(v)}</span>`;
@@ -277,7 +310,7 @@ function desenhaGrafico(nome) {
   const labels = dados.map(d => d[0]), vals = dados.map(d => d[1]);
   graficos[nome] = new Chart($('canvas', corpo), {
     type: 'bar',
-    data: { labels, datasets: [{ data: vals, backgroundColor: labels.map(l => !ativo || l === ativo ? css('--serie') : css('--serie-fraca')), borderRadius: { topRight: 4, bottomRight: 4 }, barThickness: g.alt ? 14 : 20 }] },
+    data: { labels, datasets: [{ data: vals, backgroundColor: labels.map(l => !temFiltro(ativo) || inclui(ativo, l) ? css('--serie') : css('--serie-fraca')), borderRadius: { topRight: 4, bottomRight: 4 }, barThickness: g.alt ? 14 : 20 }] },
     options: {
       indexAxis: 'y', responsive: true, maintainAspectRatio: false, animation: false,
       layout: { padding: { right: 36 } },
@@ -292,7 +325,7 @@ function desenhaGrafico(nome) {
       onClick(_, els) {
         if (!els.length) return;
         const l = labels[els[0].index];
-        F[g.filtro] = F[g.filtro] === l ? '' : l; mudou(false);
+        alternarFiltro(g.filtro, l); mudou(false);
       },
       onHover(e, els) { e.native.target.style.cursor = els.length ? 'pointer' : 'default'; }
     },
@@ -491,13 +524,21 @@ async function lerArquivo(arq) {
 
 /* ---------- eventos ---------- */
 function eventos() {
+  $('#btnFiltros').addEventListener('click', () => {
+    const aberto = $('#btnFiltros').getAttribute('aria-expanded') !== 'true';
+    $('#btnFiltros').setAttribute('aria-expanded', String(aberto));
+    $('#btnFiltros').textContent = aberto ? 'Ocultar filtros' : 'Mostrar filtros';
+    $('.filtros').classList.toggle('aberto', aberto);
+  });
+  const ajustarTopo = () => document.documentElement.style.setProperty('--altura-topo', $('.topo').offsetHeight + 'px');
+  new ResizeObserver(ajustarTopo).observe($('.topo')); ajustarTopo();
   $('#fBusca').addEventListener('input', e => { F.busca = e.target.value; agendar(); });
   mascaraData($('#fDe'), 'de'); mascaraData($('#fAte'), 'ate');
   Object.entries(SEL).forEach(([id, k]) => $('#' + id).addEventListener('change', e => { F[k] = e.target.value; mudou(); }));
-  $('#chipsRegiao').addEventListener('click', e => { const b = e.target.closest('.chip'); if (b) { F.regional = b.dataset.reg; mudou(); } });
+  $('#chipsRegiao').addEventListener('click', e => { const b = e.target.closest('.chip'); if (b) { if (b.dataset.reg) alternarFiltro('regional', b.dataset.reg); else F.regional = ''; mudou(); } });
   $('#btnHoje').addEventListener('click', () => { F.de = F.ate = hojeISO(); mudou(); });
   $('#btn7').addEventListener('click', () => { F.de = hojeISO(); F.ate = somaDias(F.de, 7); mudou(); });
-  $('#btnLimpar').addEventListener('click', () => { F = Object.assign({}, F0); $('#fDe').removeAttribute('aria-invalid'); $('#fAte').removeAttribute('aria-invalid'); mudou(); });
+  $('#btnLimpar').addEventListener('click', () => { F = Object.assign({}, F0); $$('.lista-busca').forEach(el => { el.value = ''; el.dispatchEvent(new Event('input')); }); $('#fDe').removeAttribute('aria-invalid'); $('#fAte').removeAttribute('aria-invalid'); mudou(); });
   $('#btnEnquadrar').addEventListener('click', enquadrar);
   $('#btnPosicao').addEventListener('click', () => {
     if (!navigator.geolocation) return alert('Seu navegador não oferece localização.');
@@ -537,10 +578,15 @@ function eventos() {
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { renderGraficos(); renderMapa(false); });
 }
 const fonteOriginal = FONTE_TXT;
-function relogio() { $('#relogio').textContent = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', dateStyle: 'short', timeStyle: 'short' }); }
+function relogio() {
+  const agora = new Date();
+  $('#relogio').textContent = agora.toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo', hour12: false });
+  $('#relogio').dateTime = agora.toISOString();
+  $('#relogioData').textContent = agora.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo', weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
+}
 
 montarSelects(); iniciarMapa(); eventos();
 $('#fonteResumo').textContent = FONTE_TXT;
-relogio(); setInterval(relogio, 30000);
+relogio(); setInterval(relogio, 1000);
 mudou();
 })();

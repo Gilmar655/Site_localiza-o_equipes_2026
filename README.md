@@ -11,14 +11,25 @@ https://gilmar655.github.io/Site_localiza-o_equipes_2026/
 - `libs/`: Leaflet, Chart.js e SheetJS (locais, sem depender de CDN).
 - `.nojekyll`: faz o GitHub Pages servir os arquivos como estão.
 
-## Como publicar
-1. No repositório `Site_localiza-o_equipes_2026`, apague os arquivos antigos (ou mantenha-os e deixe o upload substituir os de mesmo nome).
-2. Extraia o ZIP e envie **o conteúdo da pasta** (não a pasta em si) em *Add file → Upload files*. Inclua o arquivo `.nojekyll` (vazio), que alguns exploradores ocultam.
-3. *Commit changes*. Em *Settings → Pages*, a origem deve ser a branch `main`, pasta `/ (root)`.
-4. Aguarde 1–2 minutos e abra o link do site.
+## Atualização visual — 02/11/2026
+- Filtros à esquerda, com pesquisa nas listas, seleção múltipla e botão Limpar tudo.
+- Cabeçalho com título, logomarca Enel Brasil e relógio com segundos, data por extenso e fuso America/Sao_Paulo.
+- Layout claro e responsivo; em telas pequenas o botão Mostrar filtros abre o painel.
+- Rodapé: Criado por Gilmar Campos.
+- Mapa, agenda, gráficos, importação, exportação e dados existentes preservados.
+- As quantidades nas opções dos filtros se referem à base completa; indicadores, mapa, gráficos e tabela acompanham a seleção.
+- Dentro de uma categoria as opções somam resultados (OU); entre categorias os filtros se combinam (E).
+- O relógio usa a hora do dispositivo, convertida para Brasília, e atualiza a cada segundo. Mantenha a data e a hora do dispositivo sincronizadas.
 
-Pelo terminal: copie o conteúdo para a pasta do repositório clonado e rode
-`git add -A && git commit -m "Atualiza programação 31/10/2026" && git push`.
+## Como publicar
+O site permanece no GitHub Pages, branch `main`, pasta raiz.
+Extraia o ZIP e copie seu conteúdo para a raiz do repositório, preservando as subpastas e substituindo os arquivos de mesmo nome. Faça o commit e aguarde a publicação do GitHub Pages.
+Para abrir localmente, use um servidor HTTP, por exemplo `python -m http.server 8000`, e acesse http://localhost:8000. O mapa de fundo precisa de conexão à internet.
+
+## Logomarca
+`assets/enel-brasil.svg`: identidade Enel Brasil, de autoria da Enel Brasil.
+Fonte vetorial: https://commons.wikimedia.org/wiki/File:Enel_Brasil_Nova_Marca.svg
+Referência oficial: https://www.enel.com.br/pt/quemsomos/nova-marca.html
 
 ## Precisão da localização
 - **Exata**: o código do equipamento existe na base Buscapé.
