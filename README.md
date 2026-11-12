@@ -5,11 +5,19 @@ https://gilmar655.github.io/Site_localiza-o_equipes_2026/
 
 ## Conteúdo
 - `index.html`, `css/style.css`, `js/app.js`: página e lógica.
-- `data/programacao.js`: programação SIGEO de 31/10/2026 já cruzada com a base Buscapé (coordenadas, circuito, links Maps/Waze).
+- `data/programacao.js`: programação SIGEO futura de 12/11/2026 já cruzada com a base Buscapé (coordenadas, circuito, links Maps/Waze).
 - `data/equipamentos.csv`: base Buscapé (258.855 equipamentos, base de 12/06/2026), carregada só ao abrir a aba "Equipamentos · Buscapé".
-- `fontes/Programacao_Sigeo_31_10_2026.xlsx`: planilha original da programação.
+- `fontes/Programacao_Sigeo_12_11_2026.xlsx`: planilha original da programação.
+- `ferramentas/gerar_programacao.py`: gera `data/programacao.js` a partir da planilha SIGEO e de `data/equipamentos.csv`.
 - `libs/`: Leaflet, Chart.js e SheetJS (locais, sem depender de CDN).
 - `.nojekyll`: faz o GitHub Pages servir os arquivos como estão.
+
+## Atualização de dados — 12/11/2026
+- Programação SIGEO futura de 12/11/2026: 2.317 programações, 1.991 projetos, de 12/11/2026 a 15/01/2027.
+- 2.267 programações localizadas (97,8%): 2.063 exatas, 70 inferidas e 134 aproximadas pelo circuito; 50 sem localização.
+- Base Buscapé conferida: a planilha de 12/11/2026 é idêntica à já publicada (258.855 equipamentos, base de 12/06/2026); `data/equipamentos.csv` não mudou.
+- A nova planilha não traz a coluna UPS Orçada; o valor foi mantido da base de 31/10/2026 para os projetos que já constavam nela. Projetos novos aparecem como "Não encontrado".
+- Regenerar: `python ferramentas/gerar_programacao.py fontes/<planilha>.xlsx data/equipamentos.csv data/programacao.js data/programacao.js DD/MM/AAAA`
 
 ## Atualização visual — 02/11/2026
 - Filtros à esquerda, com pesquisa nas listas, seleção múltipla e botão Limpar tudo.

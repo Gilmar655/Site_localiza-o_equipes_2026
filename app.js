@@ -38,7 +38,7 @@ const precSelo = r => r.loc ? `<span class="selo ${PREC[r.loc[3]].cls}">${PREC[r
 const linksHTML = (la, lo) => `<a class="lk" href="${gmaps(la, lo)}" target="_blank" rel="noopener">Google Maps</a><a class="lk" href="${waze(la, lo)}" target="_blank" rel="noopener">Waze</a>`;
 
 /* ---------- dados ---------- */
-let FONTE_TXT = `Programação SIGEO 31/10/2026 · Base Buscapé de 12/06/2026 (258.855 equipamentos)`;
+let FONTE_TXT = `Programação SIGEO 12/11/2026 · Base Buscapé de 12/06/2026 (258.855 equipamentos)`;
 let ROWS = [];
 function prep(r, i) {
   r._i = i;
